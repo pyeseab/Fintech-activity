@@ -1,8 +1,9 @@
+import bcrypt
 from connection import get_db
 
-def add_user(username: str, email: str = None):
+def add_user(username: str, password: str, email: str = None):
     """
-    Add a new user to the database.
+    Add a new user with a hashed password.
     """
     db = next(get_db())
     cursor = db.cursor()
@@ -12,50 +13,29 @@ def add_user(username: str, email: str = None):
     if cursor.fetchone():
         return f"Username '{username}' already exists."
 
+    # Hash the password
+    password_hash = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
+
     # Insert new user
     cursor.execute(
-        "INSERT INTO users (username, email) VALUES (?, ?)",
-        (username, email)
+        "INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)",
+        (username, email, password_hash.decode("utf-8"))
     )
     db.commit()
     return f"User '{username}' added successfully."
 
 
-def get_user_by_id(user_id: int):
+def verify_user(username: str, password: str) -> bool:
     """
-    Fetch user information by user ID.
-    """
-    db = next(get_db())
-    cursor = db.cursor()
-
-    cursor.execute("SELECT id, username, email, created_at FROM users WHERE id = ?", (user_id,))
-    row = cursor.fetchone()
-    if row:
-        uid, username, email, created_at = row
-        return {
-            "id": uid,
-            "username": username,
-            "email": email,
-            "created_at": created_at
-        }
-    return None
-
-
-def get_user_by_username(username: str):
-    """
-    Fetch user information by username.
+    Verify that the username/password combination is correct.
     """
     db = next(get_db())
     cursor = db.cursor()
 
-    cursor.execute("SELECT id, username, email, created_at FROM users WHERE username = ?", (username,))
+    cursor.execute("SELECT password_hash FROM users WHERE username = ?", (username,))
     row = cursor.fetchone()
-    if row:
-        uid, uname, email, created_at = row
-        return {
-            "id": uid,
-            "username": uname,
-            "email": email,
-            "created_at": created_at
-        }
-    return None
+    if not row:
+        return False
+
+    password_hash = row[0].encode("utf-8")
+    return bcrypt.checkpw(password.encode("utf-8"), password_hash)

@@ -1,0 +1,18 @@
+# Core packages
+numpy==1.27.5        # For calculations like mean, covariance, Sharpe ratio
+pandas==2.2.1        # Optional, if using DataFrames for portfolios
+
+# Password hashing and security
+bcrypt==4.1.2
+python-dotenv==1.0.1  # Optional, for environment variables
+
+# Testing
+unittest2==1.1.0      # Optional, unittest is built-in but you can use unittest2
+
+# Optional for plotting / reporting
+matplotlib==3.8.0
+plotly==6.1.0
+
+# Optional for Docker / API later
+fastapi==0.111.0
+uvicorn==0.23.0
