@@ -1,5 +1,5 @@
 import bcrypt
-from connection import get_db
+from db.connection import get_db
 
 def add_user(username: str, password: str, email: str = None):
     """

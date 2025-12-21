@@ -1,5 +1,5 @@
 from services.advice.engine import get_advice_for_portfolio
-from connection import get_db
+from db.connection import get_db
 
 def advice_for_user_portfolios(user_id: int):
     db = next(get_db())
