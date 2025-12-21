@@ -1,6 +1,6 @@
 from fastapi import APIRouter
-from routes.advice import evaluate_sharpe
-from db.connection import get_db
+from app.services.advice_engine import evaluate_sharpe
+from app.db.connection import get_db
 
 router = APIRouter(prefix="/portfolios")
 

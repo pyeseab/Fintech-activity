@@ -1,10 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from routes import portfolios, users, advice
-
-from routes.users import add_user, get_user_by_id
-
+from app.routes.users import router as users_router
+from app.routes.portfolios import router as portfolios_router
+from app.routes.advice import router as advice_router  # make sure advice.py has router
 
 app = FastAPI(title="Vito API")
 
@@ -15,6 +14,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(users.router,      prefix="/api/users",      tags=["users"])
-app.include_router(portfolios.router, prefix="/api/portfolios", tags=["portfolios"])
-app.include_router(advice.router,     prefix="/api/advice",     tags=["advice"])
+# Use the imported router variables, not `users` or `portfolios`
+app.include_router(users_router,      prefix="/api/users",      tags=["users"])
+app.include_router(portfolios_router, prefix="/api/portfolios", tags=["portfolios"])
+app.include_router(advice_router,     prefix="/api/advice",     tags=["advice"])

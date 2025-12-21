@@ -1,5 +1,5 @@
-from routes.portfolio import get_user_portfolios
-from services.advice.engine import get_advice_for_portfolio
+from app.routes.portfolios import get_user_portfolios
+from app.services.advice_engine import get_advice_for_portfolio
 
 def generate_user_report(user_id: int):
     """

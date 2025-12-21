@@ -1,16 +1,11 @@
-# for migrations in django or sql academy or prisma i am told. helps move database to models created with changes updated
-#the following code is for connection.py file to create portfolios for users
 import sqlite3
+from typing import Generator
 
-conn = sqlite3.connect("portfolio.db")
-cursor = conn.cursor()
+DB_PATH = "portfolio.db"
 
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS portfolios (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    sharpe_ratio REAL
-)
-""")
-
-conn.commit()
+def get_db() -> Generator[sqlite3.Connection, None, None]:
+    conn = sqlite3.connect(DB_PATH)
+    try:
+        yield conn
+    finally:
+        conn.close()
